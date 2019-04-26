@@ -1,0 +1,18 @@
+.img {
+    width: 500px;
+    height: 450px;
+    background: url('http://img.taopic.com/uploads/allimg/120727/201995-120HG1030762.jpg');
+}
+
+.img1{
+    background: url('../asserts/1.jpg');
+    width: 500px;
+    height: 650px;
+}
+div{
+    display: flex;
+}
+
+p{
+    color: #fff;
+}
