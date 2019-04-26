@@ -1,0 +1,112 @@
+	1.安装全局的webpack npm install webpack -g	
+	2.创建工程文件	
+	3.工程目录下初始化 npm init 
+	4.本地安装webpack,进入工程目录下 npm install webpack -D             -D相当于--save-dev的简写
+	5.安装全局的webpack-cli  npm install wepack-cli -g
+	  安装本地的webpack-cli  npm install wepack-cli
+	6.工程文件下创建配置文件如（webpack.config.js）
+	const path = require('path');
+	const HtmlWebpackPlugin = require('html-webpack-plugin');
+	module.exports = {
+	//入口配置
+	  entry : { 
+	     index : './src/index.js',
+	     index2 : './src/index2.js'
+	},
+	//输出配置
+	  output : {
+	     filename : '[name]bundle.js',
+	     path : path.resolve(__dirname,'dist')//当前文件夹下的绝对路径	
+	 },
+	//loders
+	  module : { },
+	//插件
+	  plugin : [ 
+		new HtmlWebpackPlugin({
+			filename:'./index.html'
+			template:'./index.html',
+			title:'首页',
+			chunks:['index'],
+			minify: { 
+			    collapseWhitespace:true,
+			    removeAttributeQuotes:true			
+			},
+			hash:true //标记js，防止js冲突
+		}),
+		new HtmlWebpackPlugin({
+			filename:'./index2.html'
+			template:'./index.html',
+			title:'首页',
+			chunks:['index2'],
+			minify: { 
+			    collapseWhitespace:true,
+			    removeAttributeQuotes:true			
+			},
+			hash:true
+		}),
+		
+	],
+	//开发服务器
+	  devServer : {	}
+	}
+	7.在目录下的package.json的script标签修改为
+
+	'dev':'webpack --mode development',//开发环境 未压缩过的js文件
+	'pro':'webpack --mode production'//生产环境 压缩过的js文件
+
+	之后就可以通过npm run dev 或者npm run pro来运行
+	工程目录下就会产生dist文件夹
+
+	8.配置开发服务器
+
+	devServer : { 
+	   //设置服务器访问的基本目录
+        	contentBase : path.resolve(__dirname,'dist'),
+           //服务器的ip地址
+        	host : 'localhost',
+        //设置端口号
+        	port : 8090,
+        	open : true
+	}
+	
+	之后在工程目录下的package.js中的script属性增加
+
+	"sev": "webpack-dev-server --mode development"
+
+	之后就可以通过npm run sev
+
+	8.配置module
+	(1)css文件打包
+
+	npm install style-loader css-loader -D
+	
+	css-loader:加载css文件
+	style-loader:使用<style>将css-loader内部样式注入html页面
+	配置方法：
+	module:{ 
+	  rules : [
+		{
+		  test:/\.css$/,//正则判断css文件
+		  use:[
+			{loader:'style-loader'},
+			{loader:'css-loader'}
+			//['style-loader','css-loader']
+		     ]
+		}
+	     ]
+	}
+	js文件中导入需要注入的css文件,以base.css为例
+	如：import base from './css/base.css'
+
+	(2)图片压缩
+	
+	npm install url-loader file-loader -D
+
+	配置方法：
+
+	{ 
+		test:/\.(jpg|png|gif)$/,
+		use:[{loader:'url-loader'},{loader:'file-loader'}]	
+	}
+
+	
